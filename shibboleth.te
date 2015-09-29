@@ -1,0 +1,44 @@
+policy_module(shibboleth, 1.0.0)
+
+type shibd_t;
+type shibd_exec_t;
+type shibd_log_t;
+type shibd_etc_t;
+type shibd_cert_t;
+type shibd_var_cache_t;
+type shibd_var_run_t;
+type shibd_cache_t;
+
+files_type(shibd_exec_t)
+files_type(shibd_cache_t)
+files_type(shibd_var_cache_t)
+files_type(shibd_etc_t)
+files_type(shibd_cert_t)
+files_type(shibd_var_run_t)
+
+sysnet_dns_name_resolve(shibd_t)
+corenet_tcp_connect_http_port(shibd_t)
+shibd_readwrite_data(shibd_t)
+
+#allow shibd to read its config files.
+shibd_read_conf(shibd_t)
+shibd_read_certs(shibd_t)
+#allow it to fiddle with it socket.
+shibd_manage_socket(shibd_t)
+corenet_tcp_connect_memcache_port(shibd_t)
+
+logging_log_file(shibd_log_t)
+shibd_write_logs(shibd_t)
+domain_type(shibd_t)
+init_daemon_domain(shibd_t,shibd_exec_t)
+
+#get random data
+dev_read_rand(shibd_t)
+dev_read_urand(shibd_t)
+
+#finally, let apache connect.
+require {
+	type httpd_t;
+}
+shibd_use_mod_shibd(httpd_t)
+allow shibd_t self:unix_dgram_socket { create write };

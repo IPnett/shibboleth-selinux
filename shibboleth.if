@@ -1,0 +1,119 @@
+########################################
+## <summary>
+##  Read shibd config files.
+## </summary>
+## <param name="domain">
+##  <summary>
+##  Domain allowed access.
+##  </summary>
+## </param>
+#
+interface(`shibd_read_conf',`
+    gen_require(`
+        type $1;
+        type shibd_etc_t;
+        type etc_t;
+    ')
+    allow $1 shibd_etc_t:dir {read search getattr open};
+    allow $1 shibd_etc_t:file { read getattr open };
+')
+
+########################################
+## <summary>
+##  Read shibd:s certificate and private key files.
+## </summary>
+## <param name="domain">
+##  <summary>
+##  Domain allowed access.
+##  </summary>
+## </param>
+#
+interface(`shibd_read_certs',`
+    gen_require(`
+        type shibd_cert_t;
+        type $1;
+    ')
+
+    read_files_pattern($1, shibd_cert_t, shibd_cert_t)
+    read_lnk_files_pattern($1, shibd_cert_t, shibd_cert_t)
+')
+
+########################################
+## <summary>
+##  Write read and write to shibd:s data
+## </summary>
+## <param name="domain">
+##  <summary>
+##  Domain allowed access.
+##  </summary>
+## </param>
+#
+interface(`shibd_readwrite_data',`
+    gen_require(`
+        type shibd_var_cache_t;
+        type $1;
+    ')
+    allow $1 shibd_var_cache_t:dir { write remove_name add_name search };
+    allow $1 shibd_var_cache_t:file { rename write read getattr create unlink open };
+')
+
+########################################
+## <summary>
+##  write and manage shibds logfiles
+## </summary>
+## <param name="domain">
+##  <summary>
+##  Domain allowed access.
+##  </summary>
+## </param>
+#
+interface(`shibd_write_logs',`
+    gen_require(`
+        type shibd_log_t;
+        type $1;
+    ')
+    allow $1 shibd_log_t:dir { write remove_name add_name search };
+    allow $1 shibd_log_t:file { open rename create unlink };
+')
+
+########################################
+## <summary>
+##  create, remove, read and write shibd:s socket.
+## </summary>
+## <param name="domain">
+##  <summary>
+##  Domain allowed access.
+##  </summary>
+## </param>
+#
+interface(`shibd_manage_socket',`
+    gen_require(`
+        type shibd_var_run_t;
+    ')
+    allow $1 shibd_var_run_t:dir { write remove_name search add_name };
+    allow $1 shibd_var_run_t:sock_file { create unlink setattr };
+')
+
+########################################
+## <summary>
+##  Allows for the calling domain to access shibd (like mod_shib does)
+## </summary>
+## <param name="domain">
+##  <summary>
+##  Domain allowed access.
+##  </summary>
+## </param>
+#
+interface(`shibd_use_mod_shibd',`
+    gen_require(`
+        type $1;
+        type shibd_t;
+        type shibd_etc_t;
+        type shibd_var_run_t;
+    ')
+    allow $1 shibd_etc_t:file { read getattr open };
+    allow $1 shibd_etc_t:dir { read getattr open search };
+    allow $1 shibd_t:unix_stream_socket connectto;
+    allow $1 shibd_var_run_t:dir search;
+    allow $1 shibd_var_run_t:sock_file write;
+')

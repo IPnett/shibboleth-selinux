@@ -2,7 +2,7 @@
 
 Name:		shibboleth-selinux	
 Version:	1.0.0
-Release:	7%{?dist}
+Release:	8%{?dist}
 Summary:	SELinux Policy for shibboleth
 
 Group:		System Environment/Base

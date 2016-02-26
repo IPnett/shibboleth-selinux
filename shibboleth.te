@@ -39,8 +39,7 @@ dev_read_urand(shibd_t)
 #finally, let apache connect.
 require {
 	type httpd_t;
-    type kernel_t;
 }
 shibd_use_mod_shibd(httpd_t)
 allow shibd_t self:unix_dgram_socket { create write };
-allow shibd_t kernel_t:unix_dgram_socket sendto;
+kernel_dgram_send(shibd_t)

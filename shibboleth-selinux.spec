@@ -13,7 +13,7 @@ Requires(post):		selinux-policy-base >= %{selinux_policyver}, selinux-policy-tar
 Requires(postun):	policycoreutils
 BuildRequires:		selinux-policy selinux-policy-devel
 Source0: 		./shibboleth.pp
-Source1: 		./shibd_selinux.8.gz
+#Source1: 		./shibd_selinux.8.gz
 
 
 %description
@@ -26,13 +26,13 @@ SELinux Policy module for use with shibboleth
 
 %install
 install -D %{S:0} %{buildroot}%{_prefix}/usr/share/selinux/packages/shibboleth/shibboleth.pp
-install -D %{S:1} %{buildroot}%{_prefix}/usr/share/man/man8/shibd_selinux.8.gz
+#install -D %{S:1} %{buildroot}%{_prefix}/usr/share/man/man8/shibd_selinux.8.gz
 
 
 %files
 %dir %attr(0700, root, root) /usr/share/selinux/packages/shibboleth/
 %attr(0600, root, root) /usr/share/selinux/packages/shibboleth/shibboleth.pp
-%attr(0644, root, root) /usr/share/man/man8/shibd_selinux.8.gz
+#%attr(0644, root, root) /usr/share/man/man8/shibd_selinux.8.gz
 
 %post
 	/usr/sbin/semodule -i /usr/share/selinux/packages/shibboleth/shibboleth.pp 

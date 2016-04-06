@@ -17,7 +17,7 @@ rpm: build
 			$(APP)-selinux.spec
 	mv $(OUTPUTDIR)/*.rpm .
 
-build: $(APP).pp shibd_selinux.8.gz
+build: $(APP).pp 
 
 shibd_selinux.8:
 	sepolicy manpage --path . -d shibd_t

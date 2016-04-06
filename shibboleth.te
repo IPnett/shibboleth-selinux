@@ -42,3 +42,4 @@ require {
 }
 shibd_use_mod_shibd(httpd_t)
 allow shibd_t self:unix_dgram_socket { create write };
+kernel_dgram_send(shibd_t)
